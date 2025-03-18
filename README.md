@@ -1,5 +1,4 @@
-# SportsActionRecognition# Soccer Technical Events Analysis
-
+# SportsActionRecognition
 A modular, professional, and ready-to-use ML pipeline for analyzing soccer technical events from video clips. This system uses computer vision to estimate the accuracy of technical events, determining whether a ball is successfuly delivered to a teammate.
 
 ## Project Overview
