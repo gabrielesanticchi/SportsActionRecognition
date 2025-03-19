@@ -199,6 +199,6 @@ class SimplerVideoCNN(BaseModel):
         lstm_out = lstm_out[:, -1, :]
         
         # Fully connected layers
-        output = self.fc(lstm_out)
+        output = self.fc(lstm_out) 
         
         return output

@@ -10,7 +10,7 @@ import time
 from tqdm import tqdm
 import logging
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-
+from src.utils.plot_utils import PlotUtils
 
 class Trainer:
     """
@@ -249,13 +249,13 @@ class Trainer:
             # Move inputs and labels to device
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
-            
+            # PlotUtils.plot_video_frames(inputs[-1], save_path='video_frames.png') 
             # Zero the parameter gradients
             self.optimizer.zero_grad()
             
             # Forward pass
             outputs = self.model(inputs)
-            loss = self.criterion(outputs, labels)
+            loss = self.criterion(outputs, labels) #NOTE:  In the training code, you're using nn.CrossEntropyLoss(), which internally combines a LogSoftmax and NLLLoss.
             
             # Backward pass and optimize
             loss.backward()
