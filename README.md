@@ -70,7 +70,7 @@ soccer-event-analysis/
 
 Modify `config/config.yaml` to customize the pipeline:
 
-- **Data Configuration**: Specify container ID, S3 bucket, and event filters
+- **Data Configuration**: Specify match ID, S3 bucket, and event filters
 - **Model Configuration**: Choose model type, architecture, and hyperparameters
 - **Training Configuration**: Set batch size, learning rate, and training epochs
 - **Logging Configuration**: Configure checkpointing and logging behavior

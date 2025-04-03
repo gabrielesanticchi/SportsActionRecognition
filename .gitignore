@@ -1,5 +1,5 @@
 # Custom 
-config/
+config/config.yaml
 .env
 data/
 tests/

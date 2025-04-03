@@ -122,7 +122,7 @@ def main():
         os.makedirs(config['logging']['log_dir'], exist_ok=True)
         os.makedirs(config['logging']['checkpoint_dir'], exist_ok=True)
         
-        print(f"Created directory structure. Container ID: {config['data']['container_id']}")
+        print(f"Created directory structure. match ID: {config['data']['match_id']}")
         
         # Download XML data
         from src.utils.s3_utils import S3Downloader

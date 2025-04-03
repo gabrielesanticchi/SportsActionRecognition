@@ -18,10 +18,10 @@ class S3Downloader:
             self.config = yaml.safe_load(f)
         
         # Extract S3 configuration
-        self.container_ids = self.config['data']['container_ids']
+        self.match_ids = self.config['data']['match_ids']
         self.output_bucket = self.config['data']['output_bucket']
-        self.base_paths = [f"{self.config['data']['base_path']}/{container_id}" 
-                          for container_id in self.container_ids]
+        self.base_paths = [f"{self.config['data']['base_path']}/{match_id}" 
+                          for match_id in self.match_ids]
         
         # Create AWS S3 client
         self.s3 = boto3.client(
@@ -40,16 +40,16 @@ class S3Downloader:
 
     def download_xml_files(self) -> List[Tuple[Optional[str], Optional[str]]]:
         """
-        Download XML files for all specified container IDs.
+        Download XML files for all specified match IDs.
         
         Returns:
-            List of tuples (videomatch_content, sportscode_content) for each container
+            List of tuples (videomatch_content, sportscode_content) for each match
         """
         all_results = []
         
-        for container_id, base_path in zip(self.container_ids, self.base_paths):
+        for match_id, base_path in zip(self.match_ids, self.base_paths):
             try:
-                # List objects in the container directory
+                # List objects in the match directory
                 response = self.s3.list_objects_v2(
                     Bucket=self.output_bucket,
                     Prefix=base_path
@@ -155,7 +155,7 @@ class S3Downloader:
         Download clips for a list of events and update event dictionaries with local paths.
         
         Args:
-            events: List of event dictionaries with 'clip_filename' and 'user_id' fields
+            events: List of event dictionaries with 'clip_filename' and 'player_id' fields
             
         Returns:
             Updated list of events with 'local_path' field added
@@ -166,13 +166,13 @@ class S3Downloader:
         updated_events = []
         
         for event in events:
-            user_id = event.get('user_id', 'unknown')
+            player_id = event.get('player_id', 'unknown')
             group = event['group']
             clip_filename = event['clip_filename']
-            container_id = event['container_id']
+            match_id = event['match_id']
             
-            # Get the correct base path for this container
-            base_path = f"{self.config['data']['base_path']}/{container_id}"
+            # Get the correct base path for this match
+            base_path = f"{self.config['data']['base_path']}/{match_id}"
             
             # Check if file already exists locally
             local_path = os.path.join(raw_dir, clip_filename)
@@ -183,8 +183,8 @@ class S3Downloader:
                 continue
             
             # If file doesn't exist, download it
-            s3_path = f"{base_path}/{user_id}/{group}/{clip_filename}"
-            print(f'Downloading {clip_filename} from container {container_id}...')
+            s3_path = f"{base_path}/{player_id}/{group}/{clip_filename}"
+            print(f'Downloading {clip_filename} from match {match_id}...')
             local_path = self.download_clip(s3_path, raw_dir)
             
             if local_path:
@@ -211,20 +211,20 @@ class S3Downloader:
     
     def find_xml_and_video_paths(self) -> Tuple[Optional[str], Optional[str]]:
         """
-        Find XML and video file paths for the container.
+        Find XML and video file paths for the match.
         
         Returns:
             Tuple of (xml_path, video_url)
         """
         try:
-            # List objects in the container directory
+            # List objects in the match directory
             response = self.s3.list_objects_v2(
                 Bucket=self.output_bucket,
                 Prefix=self.base_path
             )
             
             if 'Contents' not in response:
-                print(f"No files found for container ID {self.container_id}")
+                print(f"No files found for match ID {self.match_id}")
                 return None, None
             
             # Find videomatch XML file and video file

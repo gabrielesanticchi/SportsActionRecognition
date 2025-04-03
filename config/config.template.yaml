@@ -1,0 +1,68 @@
+# Soccer Technical Events Analysis - Configuration Template
+
+# S3 and data configuration
+data:
+  match_ids: ["match_id_1", "match_id_2"]  # Replace with your match IDs
+  output_bucket: "YOUR_S3_BUCKET"  # Replace with your S3 bucket name
+  base_path: "YOUR_BASE_PATH"  # Base path in S3 bucket
+  data_dir: "data"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  metadata_dir: "data/metadata"
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+  event_filters:
+    include_passes: true
+    include_crosses: true
+    include_long_balls: true
+    include_shots: true
+
+# Model configuration
+model:
+  type: "simpler_video_cnn"  # Options: "video_cnn", "simpler_video_cnn", "slowfast_network"
+  feature_extractor: "resnet18"  # Options: "resnet18", "resnet34", "resnet50"
+  pretrained: true
+  num_classes: 2
+  sequence_length: 16
+  dropout: 0.5
+  video_params:
+    frame_rate: 2
+    clip_duration: 10
+    resize_dim: [224, 224]
+  slowfast_params:
+    alpha: 8
+    beta: 0.125
+    slow_pathway_stages: [1, 2, 3, 4]
+    fast_pathway_stages: [1, 2, 3, 4]
+
+# Training configuration
+training:
+  batch_size: 8
+  num_epochs: 30
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  lr_scheduler:
+    use: true
+    type: "reduce_on_plateau"  # Options: "reduce_on_plateau", "step", "cosine"
+    patience: 5
+    factor: 0.5
+  early_stopping:
+    use: true
+    patience: 10
+    min_delta: 0.001
+  devices: [0]  # Set to [] for CPU only
+  seed: 42
+
+# Logging and checkpoints
+logging:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints"
+  save_freq: 1
+  log_freq: 10
+
+# Video compression settings
+video:
+  fps: 5
+  resolution: 640x360  # Format: WIDTHxHEIGHT
+  crf: 23  # Range: 0-51 (lower is better quality)

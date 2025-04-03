@@ -98,18 +98,18 @@ class XMLEventExtractor:
         Generate a standardized filename for video clips.
         
         Args:
-            event: Event dictionary containing event details (must include user_id)
+            event: Event dictionary containing event details (must include player_id)
             
         Returns:
             str: Formatted filename for the clip
         """
-        # Ensure user_id is present in the event
-        if 'user_id' not in event:
-            raise ValueError("Event must contain user_id before generating clip filename")
+        # Ensure player_id is present in the event
+        if 'player_id' not in event:
+            raise ValueError("Event must contain player_id before generating clip filename")
             
         # Extract the known name (player name)
         known_name = event['code'].replace('.', '_').replace(' ', '')
-        user_id = event['user_id']
+        player_id = event['player_id']
 
         # Transform from start (sec) to start in min_sec
         event_time = (event['start'] + event['end']) / 2
@@ -120,8 +120,8 @@ class XMLEventExtractor:
         timestamp = event['formatted_time']
         
         # Create standardized filename:
-        # format: {known_name}_{group}_{event_time}_{user_id}_{timestamp}.mp4
-        filename = f"{known_name}_{group}_{event_time}_{user_id}_{timestamp}.mp4"
+        # format: {known_name}_{group}_{event_time}_{player_id}_{timestamp}.mp4
+        filename = f"{known_name}_{group}_{event_time}_{player_id}_{timestamp}.mp4"
         
         # Replace any problematic characters
         filename = filename.replace(' ', '').replace('/', '_').replace('\\', '_')
@@ -141,15 +141,15 @@ class XMLEventExtractor:
         events = self.extract_events()
         
         for event in events:
-            # First, apply user_id from player mapping
+            # First, apply player_id from player mapping
             code = event['code']
             if code in player_mapping:
-                event['user_id'] = player_mapping[code]
+                event['player_id'] = player_mapping[code]
             else:
-                # Use a default user_id for players not in the mapping
-                event['user_id'] = 'unknown'
+                # Use a default player_id for players not in the mapping
+                event['player_id'] = 'unknown'
             
-            # Now generate the clip filename with the user_id included
+            # Now generate the clip filename with the player_id included
             event['clip_filename'] = self.generate_clip_filename(event)
             
             # Extract recipient player info if available
