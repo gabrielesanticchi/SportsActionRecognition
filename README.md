@@ -1,10 +1,8 @@
-# SportsActionRecognition
-A modular, professional, and ready-to-use ML pipeline for analyzing soccer technical events from video clips. This system uses computer vision to estimate the accuracy of technical events, determining whether a ball is successfuly delivered to a teammate.
+# SportsActionRecognition [WIP ⚠️]
+A modular ML pipeline for analyzing soccer technical events from video clips. This system uses computer vision to estimate the accuracy of technical events, determining whether a ball is successfuly delivered to a teammate.
 
 ## Project Overview
-
 This pipeline analyzes 10-second video clips of soccer events (passes, crosses, long balls) and predicts whether the event was successful or not. The system:
-
 1. Uses XML metadata to extract event information
 2. Downloads clips from S3 storage
 3. Processes video data using PyTorch
@@ -69,8 +67,7 @@ soccer-event-analysis/
 ## Configuration
 
 Modify `config/config.yaml` to customize the pipeline:
-
-- **Data Configuration**: Specify match ID, S3 bucket, and event filters
+- **Data Configuration**: Specify container ID, S3 bucket, and event filters
 - **Model Configuration**: Choose model type, architecture, and hyperparameters
 - **Training Configuration**: Set batch size, learning rate, and training epochs
 - **Logging Configuration**: Configure checkpointing and logging behavior
