@@ -133,7 +133,7 @@ class XMLEventExtractor:
         Extract events with their clip filenames.
         
         Args:
-            player_mapping: Dictionary mapping player names to user IDs
+            player_mapping: Dictionary mapping player names to player IDs
             
         Returns:
             List of dictionaries containing event data and clip filenames
